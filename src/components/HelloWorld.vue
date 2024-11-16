@@ -1,58 +1,111 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+  <div class="weight-tracker">
+    <h2>Weight Tracker</h2>
+
+    <div class="input-group">
+      <label>Starting Weight:</label>
+      <div class="weight-input">
+        <div class="input-wrapper">
+          <input
+            type="number"
+            v-model="startingWeightStones"
+            placeholder="Stones"
+          />
+        </div>
+        <div class="input-wrapper">
+          <input
+            type="number"
+            v-model="startingWeightPounds"
+            placeholder="Pounds"
+          />
+        </div>
+
+        <label>Current Weight:</label>
+        <div class="weight-input">
+          <div class="input-wrapper">
+            <input
+              type="number"
+              v-model="currentWeightStones"
+              placeholder="Stones"
+            />
+          </div>
+          <div class="input-wrapper">
+            <input
+              type="number"
+              v-model="currentWeightPounds"
+              placeholder="Pounds"
+            />
+          </div>
+        </div>
+
+        <label>Target Weight:</label>
+        <div class="weight-input">
+          <div class="input-wrapper">
+            <input
+              type="number"
+              v-model="targetWeightStones"
+              placeholder="Stones"
+            />
+          </div>
+          <div class="input-wrapper">
+            <input
+              type="number"
+              v-model="targetWeightPounds"
+              placeholder="Pounds"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="progress-bar">
+      <div class="progress" :style="{ width: progressPercentage + '%' }"></div>
+    </div>
+
+    <p>Progress: {{ progressPercentage }}%</p>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
-  }
-}
+  name: "WeightTracker",
+  data() {
+    return {
+      startingWeightStones: 0,
+      startingWeightPounds: 0,
+      currentWeightStones: 0,
+      currentWeightPounds: 0,
+      targetWeightStones: 0,
+      targetWeightPounds: 0,
+    };
+  },
+  computed: {
+    progressPercentage() {
+      // Convert weights to a common unit (e.g., pounds)
+      const startingWeight =
+        this.startingWeightStones * 14 + this.startingWeightPounds;
+      const currentWeight =
+        this.currentWeightStones * 14 + this.currentWeightPounds;
+      const targetWeight =
+        this.targetWeightStones * 14 + this.targetWeightPounds;
+
+      if (targetWeight === 0) {
+        return 0;
+      }
+
+      return (
+        ((currentWeight - startingWeight) / (targetWeight - startingWeight)) *
+        100
+      );
+    },
+  },
+};
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
+.weight-input {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Adjust the gap as needed */
 }
 </style>
